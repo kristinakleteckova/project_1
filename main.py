@@ -4,7 +4,7 @@ projekt_1.py: první projekt do Engeto Online Python Akademie
 author: Kristina Kletečková
 email: kleteckova.kristina@gmail.com
 """
-Texts = [
+texts = [
     '''Situated about 10 miles west of Kemmerer, Fossil Butte is a ruggedly impressive 
     topographic feature that rises sharply
     some 1000 feet above Twin Creek Valley
@@ -30,39 +30,38 @@ Texts = [
     in modern oceans. Other fish such as paddlefish,
     garpike and stingray are also present.'''
     ]
-Users = {"bob": "123", "ann": "pass123", "mike": "password123", "liz": "pass123"}
+users = {"bob": "123", "ann": "pass123", "mike": "password123", "liz": "pass123"}
 username = (input("Please enter your username: "))
 password = (input("Please enter your password: "))
 separator = "-" * 38
 print(separator)
-kontact = (username, password)
-size = len(Texts)
+credentials = username, password
+number_of_texts = len(texts)
 
-if kontact in Users.items():  # ověření uživatele a umožnění zvolit text
+if credentials in users.items():  # ověření uživatele a umožnění zvolit text
   print(f"Welcome to the app, {username}.")
-  print(f"We have {size} texts to be analyzed.")
+  print(f"We have {number_of_texts} texts to be analyzed.")
   print(separator)
-  number = input(f"Enter number btw. 1 and {size} to select: ")
+  number = input(f"Enter number btw. 1 and {number_of_texts} to select: ")
 
-  if number.isdigit():  # ověření, zda se jedná o číslo
-    number = int(number)
-  else:
+  if not number.isdigit():  # ověření, zda se jedná o číslo
     print("Non-exist text, terminating the program")
     exit()
+  else:
+    number = int(number)
 
   index = number - 1
-  size = len(Texts)
 
-  if number <= size:  # ověření, zda existuje takto očíslovaný text
+  if number <= number_of_texts and number > 0:  # ověření, zda existuje takto očíslovaný text
     print("Start analysis the text:")
-    analyzed_text = Texts[index]
-    words = (analyzed_text.split(" ")) # rozdělení textu na slova do tuplu
+    analyzed_text = texts[index]
+    words = analyzed_text.split() # rozdělení textu na slova
     text_cleaning = [
         word.replace(",", "").replace(".", "").replace("\n", "") 
         for word in words 
         ] # odstranění interpunkce a ukončených řádků
     text_cleaning = [word for word in text_cleaning if word != ""]  # vymazání prázdných prvků 
-    word_count = (len(text_cleaning)) 
+    word_count = len(text_cleaning) 
     word_titlecase = len([word for word in text_cleaning if word.istitle()])
     word_uppercase = len([word for word in text_cleaning if word.isupper()])
     word_lowercase = len([word for word in text_cleaning if word.islower()])
@@ -85,15 +84,12 @@ if kontact in Users.items():  # ověření uživatele a umožnění zvolit text
     print(separator)
     counter = dict()  # vytvoření slovníku do kterého budou ukládány četnosti výskytu jednotlivých délek slov
     
-    for word in text_cleaning: # cyklus prochází tuple slov, určuje délku slova a tu ukládá jako klíč
+    for word in text_cleaning: # cyklus prochází jednotlivá slova textu, určuje délku slova a tu ukládá jako klíč
       length = len(word)
-      if length in counter: # pokud ve slovíku tento klíč existuje, hodnota se zvedne o 1 
-        counter[length] += 1
-      else: 
-        counter[length] = 1 # jinak přidá nový klíč a jeho hodnota bude 1
+      counter[length] = counter.get(length, 0) + 1
     
     for key, value in sorted(counter.items()): # seřazení slovníku podle klíče a převedení na dvojice
-      print(f"{key:<3} | {value * '*':<20} | {value}")  # vytvoření slopcového grafu  klíč - počet písmen, hodnota četnost - výskytu
+      print(f"{key:<3} | {value * '*':<20} | {value}")  # vytvoření sloupcového grafu  klíč - počet písmen, hodnota četnost - výskytu
       
     print(separator)
   
